@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>민석 로그인</title>
+</head>
+<body>
+<h2>로그인 페이지</h2>
+<form id="login-form">
+    <label for="username">아이디:</label><br>
+    <input type="text" id="username" name="username"><br><br>
+    <label for="password">비밀번호:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    <button type="submit">로그인</button>
+</form>
+
+<p id="result"></p>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('http://localhost:8080/users/login', {  // ✅ 수정된 주소
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("로그인 실패");
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('result').innerText = `${data.username}님 환영합니다!`;
+        })
+        .catch(err => {
+            document.getElementById('result').innerText = '로그인 실패: ' + err.message;
+        });
+    });
+</script>
+
+</body>
+</html>
