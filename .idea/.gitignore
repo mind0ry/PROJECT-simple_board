@@ -12,5 +12,6 @@ build/
 # macOS
 .DS_Store
 
-# 기타
+# 로그
 logs/
+*.log
