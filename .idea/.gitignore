@@ -1,7 +1,16 @@
-# Default ignored fil
-
+# IntelliJ
 .idea/
 *.iml
+
+# Gradle
 .gradle/
 build/
+
+# Java
+*.class
+
+# macOS
 .DS_Store
+
+# 기타
+logs/
