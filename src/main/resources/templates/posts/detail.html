@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title th:text="${post.title} + ' - 상세'">게시글 상세</title>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<h1 th:text="${post.title}">제목</h1>
+<p>
+  작성자: <span th:text="${post.authorUsername}">작성자</span>
+  | 작성일: <span th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">시간</span>
+</p>
+<hr/>
+<div th:utext="${post.content}">
+  <!-- HTML 포함 내용일 경우 utext -->
+  내용
+</div>
+
+<p>
+  <a href="/posts">목록으로</a>
+  <!-- TODO: 수정/삭제 버튼은 나중에 권한 연동 후 노출 -->
+</p>
+</body>
+</html>
