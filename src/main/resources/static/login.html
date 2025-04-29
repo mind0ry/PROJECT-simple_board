@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -17,31 +19,30 @@
 <p id="result"></p>
 
 <script>
-    document.getElementById('login-form').addEventListener('submit', function(e) {
-        e.preventDefault();
+    document.getElementById("loginForm").onsubmit = function(event) {
+        event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
 
-        fetch('http://localhost:8080/users/login', {  // ✅ 수정된 주소
+        fetch('/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({ username, password })
         })
-        .then(response => {
-            if (!response.ok) throw new Error("로그인 실패");
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            document.getElementById('result').innerText = `${data.username}님 환영합니다!`;
+            localStorage.setItem('jwt', data.token);  // 로그인 후 JWT 토큰 저장
+            window.location.href = '/posts/view';  // 로그인 후 리다이렉트
         })
-        .catch(err => {
-            document.getElementById('result').innerText = '로그인 실패: ' + err.message;
+        .catch(error => {
+            console.error('Error:', error);
         });
-    });
+    };
 </script>
+<p>Welcome, <span th:text="${currentUsername}"></span>!</p>
 
 </body>
 </html>
