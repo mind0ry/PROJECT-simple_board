@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>로그인</title>
+    <style>
+        body { font-family: sans-serif; margin: 2rem; }
+        input, button { padding: .5rem; margin: .3rem 0; display: block; }
+        #loginMessage { margin-top: 1rem; color: green; }
+    </style>
+</head>
+<body>
+
+<h1>로그인</h1>
+<form id="loginForm">
+    <label>
+        아이디:
+        <input type="text" name="username" required />
+    </label>
+    <label>
+        비밀번호:
+        <input type="password" name="password" required />
+    </label>
+    <button type="submit">로그인</button>
+</form>
+
+<div id="loginMessage"></div>
+
+<script>
+    // 폼 요소 찾아서 이벤트 등록
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const username = form.username.value.trim();
+      const password = form.password.value;
+
+      // 입력 검증
+      if (!username || !password) {
+        document.getElementById('loginMessage').innerText = '아이디와 비밀번호를 모두 입력하세요.';
+        return;
+      }
+
+      try {
+        // 서버에 로그인 요청
+        const res = await fetch('/users/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        if (res.status === 401) {
+          document.getElementById('loginMessage').innerText = '로그인 정보가 올바르지 않습니다.';
+          return;
+        }
+        if (!res.ok) {
+          document.getElementById('loginMessage').innerText = '로그인 중 오류가 발생했습니다.';
+          return;
+        }
+
+        // 성공
+        const { token } = await res.json();
+        localStorage.setItem('jwt', token);
+
+        // 메시지 출력
+        document.getElementById('loginMessage').innerText = `${username}님, 로그인 성공!`;
+
+        // 잠시 후 이동
+        setTimeout(() => {
+          window.location.href = '/posts';  // 실제 존재하는 경로로 바꿔주세요
+        }, 1000);
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loginMessage').innerText = '서버에 연결할 수 없습니다.';
+      }
+    });
+</script>
+
+</body>
+</html>
