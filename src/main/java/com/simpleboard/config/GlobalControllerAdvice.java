@@ -1,0 +1,4 @@
+package com.simpleboard.config;
+
+public class GlobalControllerAdvice {
+}
